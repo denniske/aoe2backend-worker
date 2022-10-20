@@ -23,9 +23,8 @@ export default {
 
         if (url.includes('/favicon.ico')) return new Response('');
 
-        console.log('url', url);
-
-        console.log(env.DATABASE_URL);
+        // console.log('url', url);
+        // console.log(env.DATABASE_URL);
 
         if (url.includes('/api/matches?')) {
             return await apiMatches(request, env);
@@ -33,36 +32,3 @@ export default {
         return new Response("Hello World!");
     },
 };
-
-
-// addEventListener('fetch', (event) => {
-//     event.respondWith(handleEvent(event))
-// })
-//
-// async function handleEvent(event: FetchEvent): Promise<Response> {
-//     const { request } = event
-//     const { url } = request
-//
-//     console.log('url', url);
-//
-//     if (url.includes('/api/matches?')) {
-//         return await apiMatches(request);
-//     }
-//
-//     // waitUntil method is used for sending logs, after response is sent
-//     // event.waitUntil(
-//     //     prisma.api_key.create({
-//     //         data: {
-//     //             api_key: 'Info ' + new Date(),
-//     //         },
-//     //     }).then()
-//     // )
-//
-//     // await prisma.api_key.create({
-//     //     data: {
-//     //         api_key: 'Info ' + new Date(),
-//     //     },
-//     // })
-//
-//     return new Response(`request method: ${request.method}!`)
-// }

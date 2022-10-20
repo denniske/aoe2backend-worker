@@ -57,7 +57,6 @@ export function getLeaderboardEnumFromId(leaderboardId: number) {
 }
 
 export function getLeaderboardIdFromEnum(leaderboardEnum: string) {
-    console.log('getLeaderboardIdFromEnum', leaderboardEnum);
     const leaderboard = leaderboards.find((m) => m.enum === leaderboardEnum);
     if (leaderboard == null) {
         throw new Error(`Leaderboard enum ${leaderboardEnum} not found`);
