@@ -13,9 +13,7 @@ const PER_PAGE = 20;
 
 export async function apiMatches(req: Request, env: Env) {
     const prisma = getPrisma(env);
-    const { searchParams } = new URL(req.url)
-    let name = searchParams.get('profile_ids')
-    console.log(name)
+    const { searchParams } = new URL(req.url);
 
     const language = searchParams.get('language') ?? 'en';
     const page = parseInt(searchParams.get('page') ?? '1');

@@ -10,3 +10,9 @@ export function getPrisma(env: Env) {
       datasources: { db: { url: env.DATABASE_URL } },
   });
 }
+
+let _env = {};
+
+export function setEnv(env: Env) {
+    _env = env;
+}
