@@ -1,12 +1,6 @@
 name = "aoe2backend-worker"
-type = "webpack"
-route = ''
-zone_id = ''
-usage_model = ''
-compatibility_flags = []
-workers_dev = true
+main = "src/index.ts"
 compatibility_date = "2022-10-20"
-webpack_config = "webpack.config.js"
 
 #[vars]
 #DATABASE_URL = "prisma://aws-us-east-1.prisma-data.com/?api_key=•••••••••••••••••"
