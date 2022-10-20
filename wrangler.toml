@@ -8,6 +8,9 @@ workers_dev = true
 compatibility_date = "2022-10-20"
 webpack_config = "webpack.config.js"
 
+#[vars]
+#DATABASE_URL = "prisma://aws-us-east-1.prisma-data.com/?api_key=•••••••••••••••••"
+
 # The necessary secrets are:
 # - DATABASE_URL
 
