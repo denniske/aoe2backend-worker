@@ -6,15 +6,17 @@ import {getLeaderboardEnumFromId, getLeaderboardIdFromEnum} from "../helper/lead
 const PER_PAGE = 100;
 
 export async function apiLeaderboardSingle(req: Request, env: Env) {
-    const prisma = getPrisma(env);
-    const { searchParams } = new URL(req.url);
+    const prisma = getPrisma();
+    const { searchParams, pathname } = new URL(req.url);
     // await sleep(2000);
 
     // console.log(req.params);
     // return;
 
+    // '/api/leaderboards/{leaderboardId}'
+    const leaderboardId = pathname.split('/')[3];
+
     const page = parseInt(searchParams.get('page') ?? '1');
-    const leaderboardId = req.params.leaderboardId;
     let country = searchParams.get('country') || null;
     const steamId = searchParams.get('steam_id') || null;
     const profileId = parseInt(searchParams.get('profile_id')) || null;
@@ -48,12 +50,12 @@ export async function apiLeaderboardSingle(req: Request, env: Env) {
             },
         });
         if (leaderboardRow == null) {
-            return sendResponse(res, {
+            return sendResponse({
                 leaderboard_id: getLeaderboardIdFromEnum(leaderboardId),
                 players: [],
             });
         }
-        return sendResponse(res, {
+        return sendResponse({
             leaderboard_id: getLeaderboardIdFromEnum(leaderboardId),
             players: [
                 conv(leaderboardRow),
@@ -83,9 +85,9 @@ export async function apiLeaderboardSingle(req: Request, env: Env) {
         leaderboardRows.forEach(row => row.rank = row.rank_country);
     }
 
-    const cacheKey = CACHE_LEADERBOARD_COUNT.replace('${leaderboardId}', getLeaderboardIdFromEnum(leaderboardId));
-    const cache = JSON.parse(await redis.get(cacheKey) || '{}');
-    const total = cache[country || 'world'] || 0;
+    // const cacheKey = CACHE_LEADERBOARD_COUNT.replace('${leaderboardId}', getLeaderboardIdFromEnum(leaderboardId));
+    // const cache = JSON.parse(await redis.get(cacheKey) || '{}');
+    const total = -1; //cache[country || 'world'] || 0;
 
     return sendResponse({
         leaderboard_id: leaderboardId,

@@ -4,14 +4,18 @@ import {getPrisma} from "../db";
 import {getTranslation} from "../helper/translation";
 import {getLeaderboardEnumFromId, leaderboards} from "../helper/leaderboards";
 import {Env} from "../index";
+import {getProfiles} from "../service/profile";
 
 
 const PER_PAGE = 100;
 
 export async function apiProfileSingle(req: Request, env: Env) {
-    const prisma = getPrisma(env);
-    const { searchParams } = new URL(req.url);
-    const profileId = parseInt(req.params.profileId);
+    const prisma = getPrisma();
+    const { searchParams, pathname } = new URL(req.url);
+
+    // '/api/profiles/{profileId}'
+    const profileId = parseInt(pathname.split('/')[3]);
+
     let profile = (await getProfiles({profileId}))[0];
 
     const language = 'en';
@@ -57,6 +61,7 @@ export async function apiProfileSingle(req: Request, env: Env) {
 }
 
 async function getLeaderboards(profileId: number, language: string) {
+    const prisma = getPrisma();
     let leaderboardRows = await prisma.leaderboard_row.findMany({
         where: {
             profile_id: profileId,
@@ -74,6 +79,7 @@ async function getLeaderboards(profileId: number, language: string) {
 }
 
 async function getRating(profileId: number, leaderboard_id: number) {
+    const prisma = getPrisma();
     return await prisma.rating.findMany({
         // select: {
         //     leaderboard_id: true,
@@ -128,6 +134,7 @@ async function getStats(profileId: number, language: string) {
 }
 
 async function getStatsForLeaderboard(leaderboardId: number, profileId: number) {
+    const prisma = getPrisma();
 
     const allies = await prisma.$queryRaw`
         SELECT p2.profile_id, pr.name, pr.country, COUNT(*) as games, COUNT(*) filter (where p.won) as wins

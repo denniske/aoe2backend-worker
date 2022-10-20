@@ -1,18 +1,15 @@
 import { PrismaClient } from '@prisma/client/edge'
 import {Env} from "./index";
 
-// export const prisma = new PrismaClient({
-//     datasources: { db: { url: Deno.env.get('DATA_PROXY_URL') as string } },
-// })
 
-export function getPrisma(env: Env) {
-  return new PrismaClient({
-      datasources: { db: { url: env.DATABASE_URL } },
-  });
+let _prisma: PrismaClient;
+
+export function getPrisma(): PrismaClient {
+  return _prisma;
 }
 
-let _env = {};
-
-export function setEnv(env: Env) {
-    _env = env;
+export function setPrisma(env: Env) {
+  _prisma = new PrismaClient({
+      datasources: { db: { url: env.DATABASE_URL } },
+  });
 }

@@ -6,7 +6,7 @@ import {Env} from "../index";
 
 
 export async function apiMaps(req: Request, env: Env) {
-    const prisma = getPrisma(env);
+    const prisma = getPrisma();
     const { searchParams } = new URL(req.url);
     const language = 'en';
     const conv = row => {

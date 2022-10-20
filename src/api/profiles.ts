@@ -1,12 +1,13 @@
 import {sendResponse} from "../helper/util";
 import {getPrisma} from "../db";
 import {Env} from "../index";
+import {getProfiles} from "../service/profile";
 
 
 const PER_PAGE = 20;
 
 export async function apiProfiles(req: Request, env: Env) {
-    const prisma = getPrisma(env);
+    const prisma = getPrisma();
     const { searchParams } = new URL(req.url);
 
     const page = parseInt(searchParams.get('page') ?? '1');

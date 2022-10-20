@@ -19,6 +19,7 @@ export function sendResponse(data: any) {
     return new Response(JSON.stringify(decamelizeKeys(data), bigIntStringifer), {
         headers: {
             'content-type': 'application/json',
+            'Access-Control-Allow-Origin': '*',
         },
     });
 }

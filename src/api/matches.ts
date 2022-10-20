@@ -12,7 +12,7 @@ import {Env} from "../index";
 const PER_PAGE = 20;
 
 export async function apiMatches(req: Request, env: Env) {
-    const prisma = getPrisma(env);
+    const prisma = getPrisma();
     const { searchParams } = new URL(req.url);
 
     const language = searchParams.get('language') ?? 'en';
