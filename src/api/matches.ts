@@ -4,13 +4,15 @@ import {getLeaderboardEnumFromId, getLeaderboardIdFromEnum} from "../helper/lead
 import {getCivImage} from "../helper/civs";
 import {getMapEnumFromId, getMapImage} from "../helper/maps";
 import {getTranslation} from "../helper/translation";
-import {prisma} from "../db";
+import {getPrisma} from "../db";
 import { Prisma } from "@prisma/client/edge";
+import {Env} from "../index";
 
 
 const PER_PAGE = 20;
 
-export async function apiMatches(req: Request) {
+export async function apiMatches(req: Request, env: Env) {
+    const prisma = getPrisma(env);
     const { searchParams } = new URL(req.url)
     let name = searchParams.get('profile_ids')
     console.log(name)
@@ -142,15 +144,14 @@ export async function apiMatches(req: Request) {
         return row;
     };
 
-    console.log(req.url?.href);
+    console.log(req.url);
     console.log('/api/matches', matches2.length);
 
-    return new Response(`request method: ...!`)
-    // return sendResponse(toolkit, {
-    //     page: page,
-    //     perPage: PER_PAGE,
-    //     matches: matches2.map(conv),
-    // });
+    return sendResponse({
+        page: page,
+        perPage: PER_PAGE,
+        matches: matches2.map(conv),
+    });
 }
 
 interface RootObject {

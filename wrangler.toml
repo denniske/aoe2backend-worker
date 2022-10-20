@@ -2,10 +2,12 @@ name = "aoe2backend-worker"
 main = "src/index.ts"
 compatibility_date = "2022-10-20"
 
-#[vars]
+[vars]
 #DATABASE_URL = "prisma://aws-us-east-1.prisma-data.com/?api_key=•••••••••••••••••"
 
 # The necessary secrets are:
 # - DATABASE_URL
 
 # Run `echo <VALUE> | wrangler secret put DATABASE_URL` for it
+
+

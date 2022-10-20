@@ -12,9 +12,15 @@ export function bigIntStringifer(key: string, value: any) {
     return value;
 }
 
-export function sendResponse(res: any, data: any) {
-    res.set('content-type', 'application/json');
-    res.send(JSON.stringify(decamelizeKeys(data), bigIntStringifer));
+export function sendResponse(data: any) {
+    // res.set('content-type', 'application/json');
+    // res.send(JSON.stringify(decamelizeKeys(data), bigIntStringifer));
+
+    return new Response(JSON.stringify(decamelizeKeys(data), bigIntStringifer), {
+        headers: {
+            'content-type': 'application/json',
+        },
+    });
 }
 
 export function parseIntNullable(value: string) {
