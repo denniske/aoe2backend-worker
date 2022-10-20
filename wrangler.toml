@@ -7,3 +7,8 @@ compatibility_flags = []
 workers_dev = true
 compatibility_date = "2022-10-20"
 webpack_config = "webpack.config.js"
+
+# The necessary secrets are:
+# - DATABASE_URL
+
+# Run `echo <VALUE> | wrangler secret put DATABASE_URL` for it
