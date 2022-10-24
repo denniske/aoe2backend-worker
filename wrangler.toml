@@ -2,6 +2,13 @@ name = "aoe2backend-worker"
 main = "src/index.ts"
 compatibility_date = "2022-10-20"
 
+# needed?
+#node_compat = true
+
+kv_namespaces = [
+    { binding = "AOE2COMPANION", id = "5328970bb8eb4207ae4770f5f9ad31a9", preview_id = "cc0ab1ce1eb942ddbd3f84d024b2bf6d" }
+]
+
 [vars]
 #DATABASE_URL = "prisma://aws-us-east-1.prisma-data.com/?api_key=•••••••••••••••••"
 

@@ -214,6 +214,14 @@
             "string": "Random"
         },
         {
+            "id": 44,
+            "string": "Mirror"
+        },
+        {
+            "id": 45,
+            "string": "Full Random"
+        },
+        {
             "id": 99,
             "string": "Indians"
         }

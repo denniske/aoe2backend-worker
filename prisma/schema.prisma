@@ -7,7 +7,9 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL")
+  url      = "postgresql://janedoe:mypassword@localhost:5432/mydb?schema=sample"
+
+//  url      = env("DATABASE_URL")
 }
 
 model leaderboard_row {

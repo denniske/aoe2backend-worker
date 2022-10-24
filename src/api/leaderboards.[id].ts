@@ -85,9 +85,10 @@ export async function apiLeaderboardSingle(req: Request, env: Env) {
         leaderboardRows.forEach(row => row.rank = row.rank_country);
     }
 
-    // const cacheKey = CACHE_LEADERBOARD_COUNT.replace('${leaderboardId}', getLeaderboardIdFromEnum(leaderboardId));
-    // const cache = JSON.parse(await redis.get(cacheKey) || '{}');
-    const total = -1; //cache[country || 'world'] || 0;
+    const cacheKey = CACHE_LEADERBOARD_COUNT.replace('${leaderboardId}', leaderboardId.toString());
+    console.log(cacheKey);
+    const cache = JSON.parse(await env.AOE2COMPANION.get(cacheKey) || '{}');
+    const total = cache[country || 'world'] || 0;
 
     return sendResponse({
         leaderboard_id: leaderboardId,

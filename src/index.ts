@@ -1,15 +1,10 @@
-import {apiMatches} from "./api/matches";
 import {setPrisma} from "./db";
-import {apiLeaderboards} from "./api/leaderboards";
-import {apiProfiles} from "./api/profiles";
-import {apiMaps} from "./api/maps";
-import {apiLeaderboardSingle} from "./api/leaderboards.[id]";
-import {apiProfileSingle} from "./api/profiles.[id]";
+import {route} from "./routes";
 
 export interface Env {
     // Example binding to KV. Learn more at https://developers.cloudflare.com/workers/runtime-apis/kv/
-    // MY_KV_NAMESPACE: KVNamespace;
-    //
+    AOE2COMPANION: KVNamespace;
+
     // Example binding to Durable Object. Learn more at https://developers.cloudflare.com/workers/runtime-apis/durable-objects/
     // MY_DURABLE_OBJECT: DurableObjectNamespace;
     //
@@ -17,6 +12,7 @@ export interface Env {
     // MY_BUCKET: R2Bucket;
 
     DATABASE_URL: string;
+    KV_API_KEY: string;
 }
 
 export default {
@@ -29,23 +25,17 @@ export default {
 
         if (url.includes('/favicon.ico')) return new Response('');
 
-        const { searchParams, pathname } = new URL(url);
+        await setPrisma(env);
 
-
-        setPrisma(env);
+        // const result = await fetch('https://www.google.de');
+        // const result = await fetch('http://localhost:4300/');
+        // const result = await fetch('https://pdp.localhost/');
+        // console.log('===>', result.status);
+        // return new Response("Hello World!");
 
         // console.log('url', url);
-        // console.log(env.DATABASE_URL);
+        console.log(env.DATABASE_URL);
 
-        // if (url.includes('/api/matches?')) return await apiMatches(request, env);
-
-        if (pathname.startsWith('/api/matches')) return await apiMatches(request, env);
-        if (pathname.startsWith('/api/leaderboards/')) return await apiLeaderboardSingle(request, env);
-        if (pathname.startsWith('/api/leaderboards')) return await apiLeaderboards(request, env);
-        if (pathname.startsWith('/api/maps')) return await apiMaps(request, env);
-        if (pathname.startsWith('/api/profiles/')) return await apiProfileSingle(request, env);
-        if (pathname.startsWith('/api/profiles')) return await apiProfiles(request, env);
-
-        return new Response("Hello World!");
+        return await route(request, env);
     },
 };

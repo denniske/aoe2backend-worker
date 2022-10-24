@@ -168,12 +168,24 @@ export const civs = [
         civId: 42,
         file: 'gurjaras',
     },
+    {
+        civId: 43,
+        file: 'random',
+    },
+    {
+        civId: 44,
+        file: 'mirror',
+    },
+    {
+        civId: 45,
+        file: 'fullrandom',
+    },
 ];
 
 export function getCivImage(civId: number) {
     const civ = civs.find((m) => m.civId === civId);
     if (civ == null) {
-        return '/maps/cm_generic.png';
+        return '/civilizations/random.png';
     }
     return `https://aoe2companion.com/civilizations/${civ.file}.png`;
     // return `http://localhost:4200/civilizations/${civ.file}.png`;

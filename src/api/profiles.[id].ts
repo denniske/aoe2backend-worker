@@ -9,6 +9,12 @@ import {getProfiles} from "../service/profile";
 
 const PER_PAGE = 100;
 
+export async function apiProfileSingleRatings(req: Request, env: Env) {
+    return sendResponse({
+        ratings: true
+    });
+}
+
 export async function apiProfileSingle(req: Request, env: Env) {
     const prisma = getPrisma();
     const { searchParams, pathname } = new URL(req.url);
@@ -16,22 +22,30 @@ export async function apiProfileSingle(req: Request, env: Env) {
     // '/api/profiles/{profileId}'
     const profileId = parseInt(pathname.split('/')[3]);
 
-    let profile = (await getProfiles({profileId}))[0];
+    console.log('----0');
+
+    // let profile = (await getProfiles({profileId}))[0];
 
     const language = 'en';
     // const leaderboards = await getLeaderboards(params.profile_id, language, res);
     // const ratings = await getRatings(params.profile_id, language, res);
     // const stats = await getStats(params.profile_id, language, res);
 
+    // console.log('----1');
+
     const [
+        profile,
         leaderboards,
         ratings,
         stats,
     ] = await Promise.all([
+        (async () => (await getProfiles({profileId}))[0])(),
         getLeaderboards(profileId, language),
         getRatings(profileId, language),
         getStats(profileId, language),
     ]);
+
+    // console.log('----2', ratings);
 
     leaderboards.forEach((l: any) => {
         const ratingList = ratings.find(r => r.leaderboardId === l.leaderboardId)?.ratings ?? [];
@@ -56,7 +70,7 @@ export async function apiProfileSingle(req: Request, env: Env) {
         ...profile,
         leaderboards,
         ratings,
-        // stats,
+        stats,
     });
 }
 
@@ -80,7 +94,7 @@ async function getLeaderboards(profileId: number, language: string) {
 
 async function getRating(profileId: number, leaderboard_id: number) {
     const prisma = getPrisma();
-    return await prisma.rating.findMany({
+    const a = await prisma.rating.findMany({
         // select: {
         //     leaderboard_id: true,
         //     rating: true,
@@ -94,6 +108,8 @@ async function getRating(profileId: number, leaderboard_id: number) {
             date: 'desc',
         },
     });
+    // console.log(a);
+    return a;
 }
 
 async function getRatings(profileId: number, language: string) {
@@ -111,15 +127,15 @@ async function getRatings(profileId: number, language: string) {
     //     },
     // });
 
-    const conv = row => ({
+    const conv = async row => ({
         leaderboardId: getLeaderboardEnumFromId(row.leaderboardId),
         leaderboardName: getTranslation(language, 'leaderboard', row.leaderboardId),
         abbreviation: row.abbreviation,
         // ratings: ratings.filter(r => r.leaderboard_id === row.leaderboardId),
-        ratings: getRating(profileId, row.leaderboardId),
+        ratings: await getRating(profileId, row.leaderboardId),
     });
 
-    return leaderboards.map(conv);
+    return await Promise.all(leaderboards.map(conv));
 }
 
 async function getStats(profileId: number, language: string) {
@@ -144,7 +160,8 @@ async function getStatsForLeaderboard(leaderboardId: number, profileId: number) 
         JOIN match as m ON m.match_id = p.match_id
         WHERE p.profile_id=${profileId} AND m.leaderboard_id=${leaderboardId} -- AND p.team != -1
         GROUP BY p2.profile_id, pr.name, pr.country
-        ORDER BY games desc;
+        ORDER BY games desc
+        LIMIT 10;
     `;
 
     const opponents = await prisma.$queryRaw`
@@ -155,7 +172,8 @@ async function getStatsForLeaderboard(leaderboardId: number, profileId: number) 
         JOIN match as m ON m.match_id = p.match_id
         WHERE p.profile_id=${profileId} AND m.leaderboard_id=${leaderboardId} -- AND p.team != -1
         GROUP BY p2.profile_id, pr.name, pr.country
-        ORDER BY games desc;
+        ORDER BY games desc
+        LIMIT 10;
     `;
 
     const location = await prisma.$queryRaw`

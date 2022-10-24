@@ -5,13 +5,14 @@ import {getCivImage} from "../helper/civs";
 import {getMapEnumFromId, getMapImage} from "../helper/maps";
 import {getTranslation} from "../helper/translation";
 import {getPrisma} from "../db";
-import { Prisma } from "@prisma/client/edge";
 import {Env} from "../index";
 
 
 const PER_PAGE = 20;
 
+
 export async function apiMatches(req: Request, env: Env) {
+    const {Prisma} = await import('@prisma/client/edge')
     const prisma = getPrisma();
     const { searchParams } = new URL(req.url);
 
