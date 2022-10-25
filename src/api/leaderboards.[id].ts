@@ -33,6 +33,7 @@ export async function apiLeaderboardSingle(req: Request, env: Env) {
         row.leaderboardId = getLeaderboardEnumFromId(row.leaderboardId);
         row.games = row.wins + row.losses;
         row.country = row.profile.country;
+        row.name = row.profile.name;
         delete row.profile;
         return row;
     };
@@ -70,7 +71,7 @@ export async function apiLeaderboardSingle(req: Request, env: Env) {
         where: {
             leaderboard_id: getLeaderboardIdFromEnum(leaderboardId),
             ...(country && {profile: {country}}),
-            ...(search && {name: {contains: search, mode: "insensitive"}}),
+            ...(search && {profile: {name: {contains: search, mode: "insensitive"}}}),
         },
         skip: start - 1,
         take: count,
