@@ -1,4 +1,4 @@
-name = "aoe2backend-worker"
+name = "aoe2backend-data-proxy-worker"
 main = "src/index.ts"
 compatibility_date = "2022-10-20"
 
