@@ -13,7 +13,7 @@ export async function getProfiles(props: { search?: string, start?: number, coun
 
     start = start || 1;
 
-    let profiles = [];
+    let profiles: any[] = [];
     if (search != null) {
         profiles = await prisma.$queryRaw`
                 SELECT p.profile_id, p.name, country, SUM(wins+losses) as games

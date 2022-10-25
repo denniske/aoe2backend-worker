@@ -6,10 +6,12 @@ import {getMapEnumFromId, getMapImage} from "../helper/maps";
 import {getTranslation} from "../helper/translation";
 import {getPrisma} from "../db";
 import {Env} from "../index";
+import {getReferencePlayersDict} from "../service/reference";
 
 
 const PER_PAGE = 20;
 
+export const CACHE_VERIFIED_PLAYERS = 'verified-players';
 
 export async function apiMatches(req: Request, env: Env) {
     const {Prisma} = await import('@prisma/client/edge')
@@ -72,7 +74,7 @@ export async function apiMatches(req: Request, env: Env) {
         })).map(([team, players]) => ({ team, players }));
     };
 
-    const referencePlayersDict = {}; //await getReferencePlayersDict();
+    const referencePlayersDict = await getReferencePlayersDict(env);
 
     let matches2 = Object.entries(groupBy(matches, x => x.match_id)).map(([matchId, players]) => {
         const match = players[0];

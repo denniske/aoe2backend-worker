@@ -13,7 +13,11 @@ export interface Env {
 
     DATABASE_URL: string;
     KV_API_KEY: string;
+    LOCAL: boolean;
 }
+
+// Websockets
+// https://developers.cloudflare.com/workers/learning/using-websockets/
 
 export default {
     async fetch(
@@ -24,6 +28,8 @@ export default {
         const { url } = request
 
         if (url.includes('/favicon.ico')) return new Response('');
+
+        env.LOCAL = url.includes('localhost');
 
         await setPrisma(env);
 

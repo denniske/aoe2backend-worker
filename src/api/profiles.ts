@@ -2,6 +2,7 @@ import {sendResponse} from "../helper/util";
 import {getPrisma} from "../db";
 import {Env} from "../index";
 import {getProfiles} from "../service/profile";
+import {getReferencePlayersDict} from "../service/reference";
 
 
 const PER_PAGE = 20;
@@ -23,6 +24,15 @@ export async function apiProfiles(req: Request, env: Env) {
     }
 
     let profiles = await getProfiles({search, start, count, profileId, steamId});
+
+    const referencePlayersDict = await getReferencePlayersDict(env);
+
+    profiles = profiles.map(p => {
+        return {
+            ...p,
+            verified: referencePlayersDict?.[p.profile_id] != null,
+        }
+    });
 
     return sendResponse({
         start: start,
