@@ -20,12 +20,10 @@ export default {
         ctx: ExecutionContext
     ): Promise<Response> {
         const url = new URL(request.url);
-        // url.hostname = 'data2.aoe2companion.com';
 
         console.log(url.hostname);
-        console.log(url.hostname.replace('aoe2companion.com', 'internal.aoe2companion.com'));
 
-        url.hostname = 'legacy2.aoe2companion.com';
+        url.hostname = url.hostname.replace('aoe2companion.com', 'internal.aoe2companion.com');
         return fetch(url.toString(), request);
     },
 };
